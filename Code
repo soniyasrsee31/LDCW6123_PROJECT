@@ -1,0 +1,113 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+#include <random>
+
+// Structure to hold a single lesson item
+struct LessonItem {
+    std::string english;
+    std::string malay;
+};
+
+// Function to get a random lesson item
+LessonItem getRandomLesson(const std::vector<LessonItem>& lessons) {
+    if (lessons.empty()) {
+        return {"", ""};
+    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, lessons.size() - 1);
+    return lessons[dis(gen)];
+}
+
+// Function to run a quiz
+void runQuiz(const std::vector<LessonItem>& lessons) {
+    int score = 0;
+    const int num_questions = 5;
+
+    std::cout << "\n--- Kuiz (Quiz) Time! ---\n";
+    std::cout << "Translate the following English words/phrases to Bahasa Melayu.\n";
+
+    for (int i = 0; i < num_questions; ++i) {
+        LessonItem current_lesson = getRandomLesson(lessons);
+        std::string user_answer;
+
+        std::cout << "\nQuestion " << i + 1 << ": What is \"" << current_lesson.english << "\" in Bahasa Melayu? ";
+        std::getline(std::cin, user_answer);
+
+        if (user_answer == current_lesson.malay) {
+            std::cout << "✅ Correct! Bagus! (Good!)\n";
+            score++;
+        } else {
+            std::cout << "❌ Incorrect. The correct answer is \"" << current_lesson.malay << "\". Cuba lagi! (Try again!)\n";
+        }
+    }
+
+    std::cout << "\n--- Kuiz Selesai (Quiz Finished) ---\n";
+    std::cout << "You got " << score << " out of " << num_questions << " correct.\n";
+    std::cout << "Keep practicing!\n";
+}
+
+// Function to teach new vocabulary
+void teachVocabulary(const std::vector<LessonItem>& lessons) {
+    std::cout << "\n--- Pelajaran Kosa Kata (Vocabulary Lesson) ---\n";
+    std::cout << "Here are some basic words and phrases:\n";
+    for (const auto& item : lessons) {
+        std::cout << "- " << item.english << " -> " << item.malay << "\n";
+    }
+}
+
+// Main function
+int main() {
+    // Seed for random number generation
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Our main vocabulary list
+    std::vector<LessonItem> vocabulary = {
+        {"Hello", "Helo"},
+        {"Thank you", "Terima kasih"},
+        {"Yes", "Ya"},
+        {"No", "Tidak"},
+        {"Please", "Tolong"},
+        {"I", "Saya"},
+        {"You", "Awak"},
+        {"Eat", "Makan"},
+        {"Drink", "Minum"},
+        {"Water", "Air"},
+        {"Food", "Makanan"},
+        {"Good morning", "Selamat pagi"},
+        {"Good night", "Selamat malam"},
+        {"How are you?", "Apa khabar?"},
+        {"I'm fine", "Khabar baik"}
+    };
+
+    std::cout << "Selamat datang ke program Bahasa Melayu! (Welcome to the Bahasa Melayu program!)\n";
+    std::cout << "Let's start learning some basic words and phrases.\n";
+
+    bool running = true;
+    std::string choice;
+
+    while (running) {
+        std::cout << "\n--- Main Menu ---\n";
+        std::cout << "1. Pelajaran (Lesson)\n";
+        std::cout << "2. Kuiz (Quiz)\n";
+        std::cout << "3. Keluar (Exit)\n";
+        std::cout << "Enter your choice (1, 2, or 3): ";
+        std::getline(std::cin, choice);
+
+        if (choice == "1") {
+            teachVocabulary(vocabulary);
+        } else if (choice == "2") {
+            runQuiz(vocabulary);
+        } else if (choice == "3") {
+            running = false;
+        } else {
+            std::cout << "Pilihan tidak sah (Invalid choice). Please try again.\n";
+        }
+    }
+
+    std::cout << "\nTerima kasih dan selamat jalan! (Thank you and goodbye!)\n";
+    return 0;
+}
