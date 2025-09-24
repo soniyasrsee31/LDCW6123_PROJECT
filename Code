@@ -190,6 +190,7 @@ void runMultipleChoiceQuiz(const std::vector<LessonItem>& lessons) {
             std::cout << "Pilihan tidak sah (Invalid choice). The correct answer is " << correct_choice_char << ": \"" << correct_answer << "\".\n";
         }
     }
+
     std::cout << "\n--- Kuiz Selesai ---\n";
     std::cout << "You got " << score << " out of " << num_questions << " correct.\n";
     std::cout << "Keep practicing!\n";
@@ -207,13 +208,14 @@ void flashcardMode(const std::vector<LessonItem>& lessons) {
         if (user_input == "exit") {
             break;
         }
+
         std::cout << "Malay: " << current_item.malay << "\n";
     }
 }
 
 int main() {
     srand(static_cast<unsigned int>(time(0)));
-    
+
     std::vector<LessonItem> vocabulary = {
         {"Hello", "Helo"},
         {"Thank you", "Terima kasih"},
@@ -256,20 +258,26 @@ int main() {
     bool running = true;
     std::string choice;
     while (running) {
-        std::cout << "\n--- Main Menu ---\n";
-        std::cout << "1. Pelajaran (Lesson)\n";
-        std::cout << "  1.1. Pelajaran Asas (Basic Lesson)\n";
-        std::cout << "  1.2. Pelajaran dengan Contoh (Lesson with Examples)\n";
-        std::cout << "2. Kuiz (Quiz)\n";
-        std::cout << "  2.1. Kuiz (English to Malay)\n";
-        std::cout << "  2.2. Kuiz (Malay to English)\n";
-        std::cout << "  2.3. Kuiz Pelbagai Pilihan (Multiple Choice Quiz)\n";
-        std::cout << "3. Latihan (Practice)\n";
-        std::cout << "  3.1. Kad Imbas (Flashcards)\n";
-        std::cout << "  3.2. Latihan (Practice Mode)\n";
-        std::cout << "4. Perbualan (Conversation)\n";
-        std::cout << "5. Keluar (Exit)\n";
-        std::cout << "Enter your choice (number 1 or 1.1): ";
+        std::cout << "\n----------------------------------------\n";
+        std::cout << "|              Main Menu               |\n";
+        std::cout << "----------------------------------------\n";
+        std::cout << "|\t1. Pelajaran (Lesson)\n";
+        std::cout << "|\t   1.1. Pelajaran Asas (Basic Lesson)\n";
+        std::cout << "|\t   1.2. Pelajaran dengan Contoh (Lesson with Examples)\n";
+        std::cout << "|\t----------------------------------------\n";
+        std::cout << "|\t2. Kuiz (Quiz)\n";
+        std::cout << "|\t   2.1. Kuiz (English to Malay)\n";
+        std::cout << "|\t   2.2. Kuiz (Malay to English)\n";
+        std::cout << "|\t   2.3. Kuiz Pelbagai Pilihan (Multiple Choice Quiz)\n";
+        std::cout << "|\t----------------------------------------\n";
+        std::cout << "|\t3. Latihan (Practice)\n";
+        std::cout << "|\t   3.1. Kad Imbas (Flashcards)\n";
+        std::cout << "|\t   3.2. Latihan (Practice Mode)\n";
+        std::cout << "|\t----------------------------------------\n";
+        std::cout << "|\t4. Perbualan (Conversation)\n";
+        std::cout << "|\t5. Keluar (Exit)\n";
+        std::cout << "----------------------------------------\n";
+        std::cout << "Enter your choice (e.g., 1.1, 2.3, 5): ";
         std::getline(std::cin, choice);
 
         if (choice == "1.1") {
