@@ -29,7 +29,6 @@ void runQuiz(const std::vector<LessonItem>& lessons) {
 
     std::cout << "\n--- Kuiz (Quiz) Time! ---\n";
     std::cout << "Translate the following English words/phrases to Bahasa Melayu.\n";
-
     for (int i = 0; i < num_questions; ++i) {
         LessonItem current_lesson = getRandomLesson(lessons);
         std::string user_answer;
@@ -59,11 +58,34 @@ void teachVocabulary(const std::vector<LessonItem>& lessons) {
     }
 }
 
+// New function for practice mode
+void practiceMode(const std::vector<LessonItem>& lessons) {
+    std::cout << "\n--- Mod Latihan (Practice Mode) ---\n";
+    std::cout << "Translate words one-by-one. Type 'exit' to return to the main menu.\n";
+
+    while (true) {
+        LessonItem current_item = getRandomLesson(lessons);
+        std::string user_input;
+
+        std::cout << "\nTranslate \"" << current_item.english << "\": ";
+        std::getline(std::cin, user_input);
+
+        if (user_input == "exit") {
+            break;
+        }
+
+        if (user_input == current_item.malay) {
+            std::cout << "✅ Correct! Bagus! (Good!)\n";
+        } else {
+            std::cout << "❌ Incorrect. The correct answer is \"" << current_item.malay << "\". Try again!\n";
+        }
+    }
+}
+
 // Main function
 int main() {
     // Seed for random number generation
     srand(static_cast<unsigned int>(time(0)));
-
     // Our main vocabulary list
     std::vector<LessonItem> vocabulary = {
         {"Hello", "Helo"},
@@ -82,26 +104,26 @@ int main() {
         {"How are you?", "Apa khabar?"},
         {"I'm fine", "Khabar baik"}
     };
-
     std::cout << "Selamat datang ke program Bahasa Melayu! (Welcome to the Bahasa Melayu program!)\n";
     std::cout << "Let's start learning some basic words and phrases.\n";
 
     bool running = true;
     std::string choice;
-
     while (running) {
         std::cout << "\n--- Main Menu ---\n";
         std::cout << "1. Pelajaran (Lesson)\n";
         std::cout << "2. Kuiz (Quiz)\n";
-        std::cout << "3. Keluar (Exit)\n";
-        std::cout << "Enter your choice (1, 2, or 3): ";
+        std::cout << "3. Latihan (Practice)\n"; // New menu option
+        std::cout << "4. Keluar (Exit)\n";
+        std::cout << "Enter your choice (1, 2, 3, or 4): ";
         std::getline(std::cin, choice);
-
         if (choice == "1") {
             teachVocabulary(vocabulary);
         } else if (choice == "2") {
             runQuiz(vocabulary);
-        } else if (choice == "3") {
+        } else if (choice == "3") { // New choice handler
+            practiceMode(vocabulary);
+        } else if (choice == "4") {
             running = false;
         } else {
             std::cout << "Pilihan tidak sah (Invalid choice). Please try again.\n";
