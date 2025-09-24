@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <random>
+#include <algorithm>
+#include <set>
 
 // Structure to hold a single lesson item
 struct LessonItem {
@@ -93,6 +95,99 @@ void showConversation() {
     std::cout << "          (Yes, please. I am thirsty.)\n";
 }
 
+// New function for the Malay to English quiz
+void runQuizMalayToEnglish(const std::vector<LessonItem>& lessons) {
+    int score = 0;
+    const int num_questions = 5;
+
+    std::cout << "\n--- Kuiz Bahasa Melayu ke Bahasa Inggeris ---\n";
+    std::cout << "Terjemah perkataan/frasa Bahasa Melayu berikut ke Bahasa Inggeris.\n";
+    for (int i = 0; i < num_questions; ++i) {
+        LessonItem current_lesson = getRandomLesson(lessons);
+        std::string user_answer;
+
+        std::cout << "\nSoalan " << i + 1 << ": Apakah \"" << current_lesson.malay << "\" dalam Bahasa Inggeris? ";
+        std::getline(std::cin, user_answer);
+
+        if (user_answer == current_lesson.english) {
+            std::cout << "✅ Correct! Bagus! (Good!)\n";
+            score++;
+        } else {
+            std::cout << "❌ Incorrect. The correct answer is \"" << current_lesson.english << "\". Cuba lagi! (Try again!)\n";
+        }
+    }
+
+    std::cout << "\n--- Kuiz Selesai ---\n";
+    std::cout << "Anda mendapat " << score << " daripada " << num_questions << " jawapan yang betul.\n";
+    std::cout << "Terus berlatih!\n";
+}
+
+// New function for the multiple-choice quiz
+void runMultipleChoiceQuiz(const std::vector<LessonItem>& lessons) {
+    int score = 0;
+    const int num_questions = 5;
+
+    std::cout << "\n--- Kuiz Pelbagai Pilihan (Multiple Choice Quiz) ---\n";
+    std::cout << "Pilih jawapan yang betul (A, B, C, or D).\n";
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    for (int i = 0; i < num_questions; ++i) {
+        LessonItem correct_item = getRandomLesson(lessons);
+        std::string correct_answer = correct_item.malay;
+
+        std::vector<std::string> choices;
+        choices.push_back(correct_answer);
+
+        std::set<std::string> used_answers;
+        used_answers.insert(correct_answer);
+
+        while (choices.size() < 4) {
+            LessonItem wrong_item = getRandomLesson(lessons);
+            if (used_answers.find(wrong_item.malay) == used_answers.end()) {
+                choices.push_back(wrong_item.malay);
+                used_answers.insert(wrong_item.malay);
+            }
+        }
+
+        std::shuffle(choices.begin(), choices.end(), gen);
+
+        char correct_choice_char = 'A';
+        for (int j = 0; j < choices.size(); ++j) {
+            if (choices[j] == correct_answer) {
+                correct_choice_char = 'A' + j;
+                break;
+            }
+        }
+
+        std::cout << "\nQuestion " << i + 1 << ": What is \"" << correct_item.english << "\" in Bahasa Melayu?\n";
+        for (int j = 0; j < choices.size(); ++j) {
+            std::cout << "  " << (char)('A' + j) << ". " << choices[j] << "\n";
+        }
+
+        std::string user_choice_str;
+        std::cout << "Enter your choice: ";
+        std::getline(std::cin, user_choice_str);
+
+        if (user_choice_str.length() == 1) {
+            char user_choice = std::toupper(user_choice_str[0]);
+            if (user_choice == correct_choice_char) {
+                std::cout << "✅ Correct! Bagus! (Good!)\n";
+                score++;
+            } else {
+                std::cout << "❌ Incorrect. The correct answer is " << correct_choice_char << ": \"" << correct_answer << "\". Cuba lagi! (Try again!)\n";
+            }
+        } else {
+            std::cout << "Pilihan tidak sah (Invalid choice). The correct answer is " << correct_choice_char << ": \"" << correct_answer << "\".\n";
+        }
+    }
+
+    std::cout << "\n--- Kuiz Selesai ---\n";
+    std::cout << "You got " << score << " out of " << num_questions << " correct.\n";
+    std::cout << "Keep practicing!\n";
+}
+
 // Main function
 int main() {
     // Seed for random number generation
@@ -123,11 +218,13 @@ int main() {
     while (running) {
         std::cout << "\n--- Main Menu ---\n";
         std::cout << "1. Pelajaran (Lesson)\n";
-        std::cout << "2. Kuiz (Quiz)\n";
-        std::cout << "3. Latihan (Practice)\n";
-        std::cout << "4. Perbualan (Conversation)\n"; // New menu option
-        std::cout << "5. Keluar (Exit)\n";
-        std::cout << "Enter your choice (1, 2, 3, 4, or 5): ";
+        std::cout << "2. Kuiz (English to Malay)\n";
+        std::cout << "3. Kuiz (Malay to English)\n";
+        std::cout << "4. Kuiz Pelbagai Pilihan (Multiple Choice Quiz)\n";
+        std::cout << "5. Latihan (Practice)\n";
+        std::cout << "6. Perbualan (Conversation)\n";
+        std::cout << "7. Keluar (Exit)\n";
+        std::cout << "Enter your choice: ";
         std::getline(std::cin, choice);
 
         if (choice == "1") {
@@ -135,10 +232,14 @@ int main() {
         } else if (choice == "2") {
             runQuiz(vocabulary);
         } else if (choice == "3") {
-            practiceMode(vocabulary);
-        } else if (choice == "4") { // New choice handler
-            showConversation();
+            runQuizMalayToEnglish(vocabulary);
+        } else if (choice == "4") {
+            runMultipleChoiceQuiz(vocabulary);
         } else if (choice == "5") {
+            practiceMode(vocabulary);
+        } else if (choice == "6") {
+            showConversation();
+        } else if (choice == "7") {
             running = false;
         } else {
             std::cout << "Pilihan tidak sah (Invalid choice). Please try again.\n";
