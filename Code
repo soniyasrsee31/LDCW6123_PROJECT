@@ -7,13 +7,18 @@
 #include <algorithm>
 #include <set>
 
-// Structure to hold a single lesson item
 struct LessonItem {
     std::string english;
     std::string malay;
 };
 
-// Function to get a random lesson item
+struct LessonItemWithExample {
+    std::string english;
+    std::string malay;
+    std::string malay_example;
+    std::string english_example;
+};
+
 LessonItem getRandomLesson(const std::vector<LessonItem>& lessons) {
     if (lessons.empty()) {
         return {"", ""};
@@ -24,7 +29,6 @@ LessonItem getRandomLesson(const std::vector<LessonItem>& lessons) {
     return lessons[dis(gen)];
 }
 
-// Function to run a quiz
 void runQuiz(const std::vector<LessonItem>& lessons) {
     int score = 0;
     const int num_questions = 5;
@@ -51,7 +55,6 @@ void runQuiz(const std::vector<LessonItem>& lessons) {
     std::cout << "Keep practicing!\n";
 }
 
-// Function to teach new vocabulary
 void teachVocabulary(const std::vector<LessonItem>& lessons) {
     std::cout << "\n--- Pelajaran Kosa Kata (Vocabulary Lesson) ---\n";
     std::cout << "Here are some basic words and phrases:\n";
@@ -60,7 +63,15 @@ void teachVocabulary(const std::vector<LessonItem>& lessons) {
     }
 }
 
-// Function for practice mode
+void teachVocabularyWithExamples(const std::vector<LessonItemWithExample>& lessons) {
+    std::cout << "\n--- Pelajaran dengan Contoh (Lesson with Examples) ---\n";
+    for (const auto& item : lessons) {
+        std::cout << "\n- " << item.english << " -> " << item.malay << "\n";
+        std::cout << "  Contoh: " << item.malay_example << "\n";
+        std::cout << "  (Example: " << item.english_example << ")\n";
+    }
+}
+
 void practiceMode(const std::vector<LessonItem>& lessons) {
     std::cout << "\n--- Mod Latihan (Practice Mode) ---\n";
     std::cout << "Translate words one-by-one. Type 'exit' to return to the main menu.\n";
@@ -81,7 +92,6 @@ void practiceMode(const std::vector<LessonItem>& lessons) {
     }
 }
 
-// Function for the conversation section
 void showConversation() {
     std::cout << "\n--- Contoh Perbualan (Conversation Example) ---\n";
     std::cout << "Berikut adalah perbualan ringkas dalam Bahasa Melayu:\n";
@@ -95,7 +105,6 @@ void showConversation() {
     std::cout << "          (Yes, please. I am thirsty.)\n";
 }
 
-// Function for the Malay to English quiz
 void runQuizMalayToEnglish(const std::vector<LessonItem>& lessons) {
     int score = 0;
     const int num_questions = 5;
@@ -122,7 +131,6 @@ void runQuizMalayToEnglish(const std::vector<LessonItem>& lessons) {
     std::cout << "Terus berlatih!\n";
 }
 
-// Function for the multiple-choice quiz
 void runMultipleChoiceQuiz(const std::vector<LessonItem>& lessons) {
     int score = 0;
     const int num_questions = 5;
@@ -182,13 +190,11 @@ void runMultipleChoiceQuiz(const std::vector<LessonItem>& lessons) {
             std::cout << "Pilihan tidak sah (Invalid choice). The correct answer is " << correct_choice_char << ": \"" << correct_answer << "\".\n";
         }
     }
-
     std::cout << "\n--- Kuiz Selesai ---\n";
     std::cout << "You got " << score << " out of " << num_questions << " correct.\n";
     std::cout << "Keep practicing!\n";
 }
 
-// New function for flashcard mode
 void flashcardMode(const std::vector<LessonItem>& lessons) {
     std::cout << "\n--- Mod Kad Imbas (Flashcard Mode) ---\n";
     std::cout << "Type 'exit' to return to the main menu.\n";
@@ -201,16 +207,13 @@ void flashcardMode(const std::vector<LessonItem>& lessons) {
         if (user_input == "exit") {
             break;
         }
-
         std::cout << "Malay: " << current_item.malay << "\n";
     }
 }
 
-// Main function
 int main() {
-    // Seed for random number generation
     srand(static_cast<unsigned int>(time(0)));
-    // Our main vocabulary list
+    
     std::vector<LessonItem> vocabulary = {
         {"Hello", "Helo"},
         {"Thank you", "Terima kasih"},
@@ -228,6 +231,25 @@ int main() {
         {"How are you?", "Apa khabar?"},
         {"I'm fine", "Khabar baik"}
     };
+
+    std::vector<LessonItemWithExample> vocabulary_with_examples = {
+        {"Hello", "Helo", "Helo, apa khabar?", "Hello, how are you?"},
+        {"Thank you", "Terima kasih", "Terima kasih banyak-banyak.", "Thank you very much."},
+        {"Yes", "Ya", "Ya, saya faham.", "Yes, I understand."},
+        {"No", "Tidak", "Tidak, saya tidak mahu.", "No, I do not want."},
+        {"Please", "Tolong", "Tolong, berikan saya air.", "Please, give me water."},
+        {"I", "Saya", "Saya suka makan makanan ini.", "I like to eat this food."},
+        {"You", "Awak", "Awak sihat?", "Are you healthy?"},
+        {"Eat", "Makan", "Mari kita makan bersama-sama.", "Let's eat together."},
+        {"Drink", "Minum", "Saya nak minum air.", "I want to drink water."},
+        {"Water", "Air", "Air ini sangat sejuk.", "This water is very cold."},
+        {"Food", "Makanan", "Makanan di sini sedap.", "The food here is delicious."},
+        {"Good morning", "Selamat pagi", "Selamat pagi, cikgu!", "Good morning, teacher!"},
+        {"Good night", "Selamat malam", "Selamat malam, jumpa lagi esok.", "Good night, see you again tomorrow."},
+        {"How are you?", "Apa khabar?", "Apa khabar hari ini?", "How are you today?"},
+        {"I'm fine", "Khabar baik", "Saya khabar baik, terima kasih.", "I'm fine, thank you."}
+    };
+    
     std::cout << "Selamat datang ke program Bahasa Melayu! (Welcome to the Bahasa Melayu program!)\n";
     std::cout << "Let's start learning some basic words and phrases.\n";
 
@@ -236,31 +258,37 @@ int main() {
     while (running) {
         std::cout << "\n--- Main Menu ---\n";
         std::cout << "1. Pelajaran (Lesson)\n";
-        std::cout << "2. Kuiz (English to Malay)\n";
-        std::cout << "3. Kuiz (Malay to English)\n";
-        std::cout << "4. Kuiz Pelbagai Pilihan (Multiple Choice Quiz)\n";
-        std::cout << "5. Kad Imbas (Flashcards)\n";
-        std::cout << "6. Latihan (Practice)\n";
-        std::cout << "7. Perbualan (Conversation)\n";
-        std::cout << "8. Keluar (Exit)\n";
-        std::cout << "Enter your choice (Numbers): ";
+        std::cout << "  1.1. Pelajaran Asas (Basic Lesson)\n";
+        std::cout << "  1.2. Pelajaran dengan Contoh (Lesson with Examples)\n";
+        std::cout << "2. Kuiz (Quiz)\n";
+        std::cout << "  2.1. Kuiz (English to Malay)\n";
+        std::cout << "  2.2. Kuiz (Malay to English)\n";
+        std::cout << "  2.3. Kuiz Pelbagai Pilihan (Multiple Choice Quiz)\n";
+        std::cout << "3. Latihan (Practice)\n";
+        std::cout << "  3.1. Kad Imbas (Flashcards)\n";
+        std::cout << "  3.2. Latihan (Practice Mode)\n";
+        std::cout << "4. Perbualan (Conversation)\n";
+        std::cout << "5. Keluar (Exit)\n";
+        std::cout << "Enter your choice (number 1 or 1.1): ";
         std::getline(std::cin, choice);
 
-        if (choice == "1") {
+        if (choice == "1.1") {
             teachVocabulary(vocabulary);
-        } else if (choice == "2") {
+        } else if (choice == "1.2") {
+            teachVocabularyWithExamples(vocabulary_with_examples);
+        } else if (choice == "2.1") {
             runQuiz(vocabulary);
-        } else if (choice == "3") {
+        } else if (choice == "2.2") {
             runQuizMalayToEnglish(vocabulary);
-        } else if (choice == "4") {
+        } else if (choice == "2.3") {
             runMultipleChoiceQuiz(vocabulary);
-        } else if (choice == "5") {
+        } else if (choice == "3.1") {
             flashcardMode(vocabulary);
-        } else if (choice == "6") {
+        } else if (choice == "3.2") {
             practiceMode(vocabulary);
-        } else if (choice == "7") {
+        } else if (choice == "4") {
             showConversation();
-        } else if (choice == "8") {
+        } else if (choice == "5") {
             running = false;
         } else {
             std::cout << "Pilihan tidak sah (Invalid choice). Please try again.\n";
